@@ -82,6 +82,18 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      # Deploy to Railway
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+
+      - name: Deploy to Railway
+        run: |
+          cd api
+          railway up --service ccgen-api
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
       - name: Update deployment status
         run: |
-          echo "🚀 Successfully deployed version $(echo ${{ github.ref_name }} | sed 's/^v//')"
+          echo "🚀 Successfully deployed version $(echo ${{ github.ref_name }} | sed 's/^v//') to Railway"
