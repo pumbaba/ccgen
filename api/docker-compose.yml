@@ -11,4 +11,13 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+      - SYSTEM_PROMPT_PATH=/app/system-prompt.txt
+      - LOG_LEVEL=DEBUG
+    command: flask run --host=0.0.0.0 --port=5000
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

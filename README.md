@@ -1,43 +1,67 @@
 # ccgen - Conventional Commit Generator
 
-A tool for automatically generating high-quality commit messages from git diffs using AI. This project helps developers save time and maintain consistent commit history with minimal effort.
+Generate high-quality, [conventional commit](https://www.conventionalcommits.org/) messages from git diffs using AI.
 
-## Project Overview
+![Current Version](https://img.shields.io/badge/version-0.1.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-ccgen uses OpenAI's GPT models to analyze git diffs and generate contextually appropriate commit messages that follow best practices. It supports all types of changes of the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification
+## What is CCGen?
 
-## Project Components
+CCGen uses AI to analyze your code changes and automatically suggest well-formatted commit messages. It helps you:
 
-This project consists of two main components:
+- ✅ Save time writing commit messages
+- ✅ Maintain consistent commit history
+- ✅ Follow conventional commits standards
+- ✅ Focus on coding, not on commit wording
 
-- **API**: A Flask-based web service that uses OpenAI's GPT models to generate commit messages
-- **CLI**: A command-line tool for interacting with the API directly from your git workflow
+## Quick Start
 
-## Getting Started
-
-### API Setup
-
-The API service uses Docker for easy development and deployment. Navigate to the API directory and follow the setup instructions in the [API README](api/README.md)
-
-### CLI Setup
-
-**The CLI component is under development and will be available soon.**
-
-## Usage
-
-Once the API component is set up, you can generate commit messages through the API:
-
-Send POST requests to the API with git diffs to get commit message suggestions:
+### Option 1: Use the API
 
 ```bash
-curl -X POST http://localhost:5000/generate -H "Content-Type: application/json" -d '{"diff": "your git diff content"}'
+# Clone the repository
+git clone https://github.com/yourusername/ccgen.git
+cd ccgen/api
+
+# Setup with Docker
+cp example.env .env
+# Add your OpenAI API key
+echo "OPENAI_API_KEY=your_key_here" >> .env
+
+# Start the service
+docker-compose up -d
 ```
 
-**The CLI component is under development and will be available soon.**
+Generate a commit message:
+
+```bash
+curl -X POST http://localhost:5000/generate -H "Content-Type: application/json" \
+  -d "{\"diff\": \"$(git diff)\"}"
+```
+
+### Option 2: Use the CLI (Coming Soon!)
+
+The command-line tool for easy integration into your Git workflow is under development.
+
+## API Reference
+
+| Endpoint    | Method | Description                            |
+| ----------- | ------ | -------------------------------------- |
+| `/generate` | POST   | Generate commit messages from git diff |
+| `/health`   | GET    | Check API health status                |
+
+See the [API README](api/README.md) for detailed instructions.
+
+## Roadmap
+
+- [x] API service for commit generation
+- [ ] Command-line interface (CLI)
+- [ ] Pre-commit hook integration
+- [ ] VSCode extension
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 

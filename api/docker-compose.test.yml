@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=gpt-3.5-turbo # Using faster model for tests
+      - LOG_LEVEL=DEBUG
+      - SYSTEM_PROMPT_PATH=/app/system-prompt.txt
+    volumes:
+      - ./system-prompt.txt:/app/system-prompt.txt:ro
+      - ./src:/app/src:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
+
+  test:
+    build: .
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      - API_URL=http://api:5000/generate
+      - HEALTH_URL=http://api:5000/health
+    volumes:
+      - ./tests:/app/tests
+    command: >
+      bash -c "pip install requests pytest &&
+               python -m tests.test"

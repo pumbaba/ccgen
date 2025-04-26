@@ -1,8 +1,11 @@
 import requests
 import json
 import time
+import os
 
-API_URL = "http://localhost:5000/generate"
+# Get API URL from environment or use default
+API_URL = os.environ.get("API_URL", "http://localhost:5000/generate")
+HEALTH_URL = os.environ.get("HEALTH_URL", "http://localhost:5000/health")
 
 # Test cases with different types of diffs
 test_cases = [
@@ -111,7 +114,7 @@ index 123456..789012 100644
 def test_health():
     """Check if the API is healthy"""
     try:
-        response = requests.get("http://localhost:5000/health", timeout=5)
+        response = requests.get(HEALTH_URL, timeout=5)
         if response.status_code == 200:
             data = response.json()
             print(f"API Health: {data}")
